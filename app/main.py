@@ -521,7 +521,7 @@ def department_trend_pipeline(department: str, start_date: Date, end_date: Date)
 
 def _run_aggregation(collection: str, pipeline: list[dict], database_level: bool = False) -> list[dict]:
     if database_level:
-        return list(db.aggregate(pipeline))
+        return list(db.command({"aggregate": 1, "pipeline": pipeline, "cursor": {}, "allowDiskUse": True})["cursor"]["firstBatch"])
     return list(db[collection].aggregate(pipeline, allowDiskUse=True))
 
 
